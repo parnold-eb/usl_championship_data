@@ -87,9 +87,13 @@ select *
     , row_number() 
         over (partition by season_id, match_week_number order by season_points_away desc) as current_match_week_position_away
     , row_number() 
-        over (partition by season_id, match_week_number order by season_goals_scored desc) as current_match_week_position_goals_scored
+        over (partition by season_id, match_week_number order by season_goals_scored desc) as current_match_week_position_goals_scored_best_offense
     , row_number() 
-        over (partition by season_id, match_week_number order by season_goals_conceded desc) as current_match_week_position_goals_conceded
+        over (partition by season_id, match_week_number order by season_goals_scored asc) as current_match_week_position_goals_scored_worst_offense
+    , row_number() 
+        over (partition by season_id, match_week_number order by season_goals_conceded desc) as current_match_week_position_goals_conceded_worst_defence -- spelling mistake but keeping since it because there is no replace references function in Tableau public which makes correcting calcs using this field time consuming
+    , row_number() 
+        over (partition by season_id, match_week_number order by season_goals_conceded asc) as current_match_week_position_goals_conceded_best_defence -- spelling mistake and keeping for same reason
 from match_order
 )
 
